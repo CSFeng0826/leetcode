@@ -14,29 +14,35 @@ class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         ans = ListNode(0)
         temp = ans
-        while True:
-            carry = False
-            if l1 == None and l2 == None:
-                break
-            elif l1 == None:
-                temp.next = ListNode(l2.next.val)
+        carry = 0
+        while l1 != None or l2 != None:
+            if l1 == None:
+                _sum = l2.val + carry
+                temp.val = (_sum % 10)
+                l2 = l2.next
             elif l2 == None:
-                temp.next = ListNode(l1.next.val)
+                _sum = l1.val + carry
+                temp.val = (_sum % 10)
+                l1 = l1.next
             else:
-                _sum = l1.val + l2.val
-                temp.val = _sum % 10
-                if _sum // 10 > 0:
-                    carry = True
-                else:
-                    carry = False
+                _sum = l1.val + l2.val + carry
+                temp.val = (_sum % 10)
+                l1 = l1.next
+                l2 = l2.next
+                
+            carry = _sum // 10  
+            if l1 != None or l2 != None:
                 temp.next = ListNode(0)
-            temp = temp.next
-            l1 = l1.next
-            l2 = l2.next
+                temp = temp.next
+            else:
+                break  
+            
+        if carry > 0:
+            temp.next = ListNode(carry)
         return ans
 
-l1 = ListNode(2, ListNode(3, ListNode(1)))
-l2 = ListNode(1, ListNode(4, ListNode(5)))
+l1 = ListNode(1)
+l2 = ListNode(9, ListNode(9, ListNode(9, ListNode(9))))
 
 s = Solution()
 ans = s.addTwoNumbers(l1, l2)
